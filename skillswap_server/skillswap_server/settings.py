@@ -60,23 +60,15 @@ INSTALLED_APPS = [
     # CORS
     'corsheaders',
     # Apps
-    'channels',
+    # 'channels',
     'rest_framework',
     'marketplace',
     # jwt tokens
     'rest_framework_simplejwt',
 ]
 
-ASGI_APPLICATION = "skillswap_server.asgi.application" # Entrada para el asgi server (server para webSockets)
 
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer", # uso redis como backEnd
-        "CONFIG": {
-            "hosts": [("127.0.0.1", 6379)],
-        },
-    },
-}
+
 
 # JWT Tokens
 REST_FRAMEWORK = {

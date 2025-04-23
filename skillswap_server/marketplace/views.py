@@ -9,6 +9,9 @@ from django.contrib.auth import get_user_model
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 
+# pusher chat
+from .pusher import pusher_client
+
 class SkillViewSet(viewsets.ModelViewSet):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
@@ -54,5 +57,12 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         return jwt_response
     
 
-    
+# CHAT
 
+class messageAPIView(APIView):
+    def post(self, request):
+        pusher_client.trigger('chat', 'message', {
+            'username': request.data['username'],
+            'message': request.data['message']
+        })
+        return Response({'message': 'ok'})
