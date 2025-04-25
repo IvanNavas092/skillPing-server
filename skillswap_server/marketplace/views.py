@@ -1,13 +1,11 @@
 from rest_framework import viewsets
-from .models import User, Skill, Category, Rating
-from .serializers import UserSerializer, SkillSerializer, CategorySerializer, RatingSerializer, userLoginSerializer
+from .models import User, Skill, Category, Rating, Message
+from .serializers import MessageSerializer, UserSerializer, SkillSerializer, CategorySerializer, RatingSerializer, userLoginSerializer
 # Tokens imports
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
 
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
 
 # pusher chat
 from .pusher import pusher_client
@@ -27,6 +25,10 @@ class CategoryViewSet(viewsets.ModelViewSet):
 class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
+
+class MessageViewSet(viewsets.ModelViewSet):
+    queryset = Message.objects.all()
+    serializer_class = MessageSerializer
 
 
 
@@ -56,13 +58,3 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         # si hay error devuelvo el error original
         return jwt_response
     
-
-# CHAT
-
-class messageAPIView(APIView):
-    def post(self, request):
-        pusher_client.trigger('chat', 'message', {
-            'username': request.data['username'],
-            'message': request.data['message']
-        })
-        return Response({'message': 'ok'})
