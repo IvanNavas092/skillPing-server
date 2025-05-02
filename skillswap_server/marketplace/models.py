@@ -46,6 +46,10 @@ class Rating(models.Model):
     def __str__(self):
         return f"{self.rating_user} → {self.rated_user}: {self.value}"
     
+# --------------------
+# LOCATION MODEL
+class Location(models.Model):
+    country_name = models.CharField(max_length=100, unique=True)
     
 
 # --------------------
@@ -61,12 +65,13 @@ class User(AbstractUser):
     description = models.TextField(blank=True)
     skills = models.ManyToManyField(Skill, related_name="users_with_skill")
     interests = models.ManyToManyField(Skill, related_name="users_interested_in")
-    location = models.CharField(max_length=35, blank=True)
     disponibility = models.CharField(max_length=35, blank=True)
+    location = models.ForeignKey(Location, related_name="users_in_location", on_delete=models.CASCADE, blank=True, null=True)
+    avatar = models.PositiveSmallIntegerField(blank=True, null=True)
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
+    age = models.PositiveSmallIntegerField(blank=True, null=True)
 
-    
-    # Campos calculados para valoraciones
+    # ratings
     rating_count = models.PositiveIntegerField(default=0)
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
 
@@ -86,8 +91,13 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
     
+# modelo de mensaje
 class Message(models.Model):
     sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
     receptor = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
+
+    class Meta:
+        ordering = ['timestamp']

@@ -1,7 +1,7 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import MessageViewSet, SkillViewSet, UserViewSet, CategoryViewSet, RatingViewSet, CustomTokenObtainPairView
-from .pusher import chat
+from .views import *
+from .pusher import *
 
 # webSockets Imports
 
@@ -15,7 +15,10 @@ router.register(r'messages', MessageViewSet)
 
 urlpatterns = [
     path('', include(router.urls)),
-    path('chat', chat, name= 'chat'),
+    path('chat/send', chat, name= 'send-message'),
     path('login/', CustomTokenObtainPairView.as_view(), name='login'),
+    path('users/by-category/<category_name>', users_by_category, name='users-by-category'),
+    path('chat/history/', get_chat_history, name='get-chat-history'),
+    path('countries/', get_countries, name='get-countries'),
 ]
 

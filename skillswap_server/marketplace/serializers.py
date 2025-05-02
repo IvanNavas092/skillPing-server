@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Skill, Category, Rating, Message
+from .models import User, Skill, Category, Rating, Message, Location
 from django.contrib.auth.hashers import make_password
 
 # 
@@ -57,9 +57,15 @@ class userLoginSerializer(serializers.ModelSerializer):
                 'rating_count', 'skills', 'interests']
 
 class MessageSerializer(serializers.ModelSerializer):
-    sender = UserSerializer(read_only=True)
-    receptor = UserSerializer(read_only=True)
-
+    sender = serializers.CharField(source='sender.username')
+    receptor = serializers.CharField(source='receptor.username')
+    
     class Meta:
         model = Message
-        fields = '__all__'
+        fields = ['id', 'sender', 'receptor', 'message', 'timestamp', 'is_read']
+
+# Location serializer
+class LocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Location
+        fields = 'country_name'

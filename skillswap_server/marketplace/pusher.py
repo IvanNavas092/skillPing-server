@@ -3,6 +3,7 @@ import json
 from django.views.decorators.csrf import csrf_exempt
 from django.http import JsonResponse
 from datetime import datetime
+from .models import User, Message
 
 pusher_client = pusher.Pusher(
   app_id='1980276',
@@ -16,23 +17,41 @@ pusher_client = pusher.Pusher(
 
 @csrf_exempt
 def chat(request):
-  if request.method == 'POST':
-    try:
-      data = json.loads(request.body)
-      sender = data['sender']
-      message = data['message']
-      receptor = data['receptor']
-      room_id = f"room-chat-{sorted([sender, receptor])[0]}_{sorted([sender, receptor])[1]}" 
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            sender_username = data['sender']
+            receptor_username = data['receptor']
+            message_content = data['message']
 
-      # disparamos el mensaje al canal especifico
-      # envía un evento en tiempo real a todos los usuarios suscritos a esa sala de chat
-      pusher_client.trigger(room_id, 'new-message', {
-        'sender' : sender,
-        'message' : message,
-        'timestamp' : str(datetime.now())
-      })
-      return JsonResponse({'status': 'ok'})
-    except Exception as e:
-      return JsonResponse({'error': str(e)}, status = 400)
+            # Obtener los objetos User por username
+            sender = User.objects.get(username=sender_username)
+            receptor = User.objects.get(username=receptor_username)
+
+            # Guardar en la base de datos
+            new_message = Message.objects.create(
+                sender=sender, 
+                receptor=receptor, 
+                message=message_content
+            )
+
+            # Crear room con los nombres ordenados alfabéticamente
+            usernames = sorted([sender_username, receptor_username])
+            room_id = f"room-chat-{usernames[0]}_{usernames[1]}"
+
+            # Enviar mensaje a Pusher
+            pusher_client.trigger(room_id, 'new-message', {
+                'sender': sender_username,
+                'receptor': receptor_username,
+                'message': message_content,
+                'timestamp': str(datetime.now())
+            })
+            
+            return JsonResponse({'status': 'ok', 'message_id': new_message.id})
+        
+        except User.DoesNotExist as e:
+            return JsonResponse({'error': f'Usuario no encontrado: {str(e)}'}, status=400)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
     
-  return JsonResponse({'error'}, status = 405)
+    return JsonResponse({'error': 'Método no permitido'}, status=405)

@@ -62,6 +62,7 @@ INSTALLED_APPS = [
     # Apps
     # 'channels',
     'rest_framework',
+    'django_extensions',
     'marketplace',
     # jwt tokens
     'rest_framework_simplejwt',

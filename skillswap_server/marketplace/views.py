@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404
+import requests
 from rest_framework import viewsets
 from .models import User, Skill, Category, Rating, Message
 from .serializers import MessageSerializer, UserSerializer, SkillSerializer, CategorySerializer, RatingSerializer, userLoginSerializer
@@ -5,6 +7,11 @@ from .serializers import MessageSerializer, UserSerializer, SkillSerializer, Cat
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
+# Chat imports
+from rest_framework.decorators import api_view
+from django.db.models import Q
+
+
 
 
 # pusher chat
@@ -58,3 +65,50 @@ class CustomTokenObtainPairView(TokenObtainPairView):
         # si hay error devuelvo el error original
         return jwt_response
     
+
+@api_view(['GET'])
+def get_chat_history(request):
+    user1 = request.query_params.get('user1')
+    user2 = request.query_params.get('user2')
+
+    if not user1 or not user2:
+        return Response({'Error: Faltan usuarios'}, status= 400)
+        
+    # filter messages between user1 and user2
+    messages = Message.objects.filter(
+        Q(sender__username=user1, receptor__username=user2) |
+        Q(sender__username=user2, receptor__username=user1)
+    ).order_by('timestamp')
+
+    serializer = MessageSerializer(messages, many=True)
+    return Response(serializer.data)
+        
+# take skills from category
+@api_view(['GET'])
+def users_by_category(request, category_name):
+    category = get_object_or_404(Category, name=category_name)
+        
+    # Obtener skills de esa categoría
+    skills_in_category = Skill.objects.filter(category=category)
+    # Filtrar usuarios que tienen al menos una de esas skills
+    users = User.objects.filter(skills__in=skills_in_category).distinct()
+    serialized_users = UserSerializer(users, many=True)
+    return Response(serialized_users.data)
+
+
+# take countries from API
+@api_view(['GET'])
+def get_countries(request):
+    api_url = 'https://restcountries.com/v3.1/all'
+    try:
+        response = requests.get(api_url)
+        countries = sorted([c['name']['common'] for c in response.json()])
+        
+        print(countries)
+        return Response(countries)
+    except:
+        return Response({'Error: No se pudo obtener los países'})
+    
+    
+# Edit User
+
