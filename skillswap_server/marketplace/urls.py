@@ -11,6 +11,7 @@ router.register(r'users', UserViewSet)
 router.register(r'categories', CategoryViewSet)
 router.register(r'ratings', RatingViewSet)
 router.register(r'messages', MessageViewSet)
+router.register(r'users/update-user', updateUserViewSet, basename='update-user')
 
 
 urlpatterns = [

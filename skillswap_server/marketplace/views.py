@@ -1,8 +1,8 @@
 from django.shortcuts import get_object_or_404
 import requests
 from rest_framework import viewsets
-from .models import User, Skill, Category, Rating, Message
-from .serializers import MessageSerializer, UserSerializer, SkillSerializer, CategorySerializer, RatingSerializer, userLoginSerializer
+from .models import *
+from .serializers import *
 # Tokens imports
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
@@ -24,6 +24,10 @@ class SkillViewSet(viewsets.ModelViewSet):
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    
+class updateUserViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = updateUserSerializer
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
@@ -110,5 +114,5 @@ def get_countries(request):
         return Response({'Error: No se pudo obtener los países'})
     
     
-# Edit User
+
 

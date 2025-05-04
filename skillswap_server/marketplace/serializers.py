@@ -55,6 +55,13 @@ class userLoginSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'full_name', 
                 'description', 'average_rating',
                 'rating_count', 'skills', 'interests']
+        
+class updateUserSerializer(serializers.ModelSerializer):
+    skills = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True, required=False)
+    interests = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True, required=False)
+    class Meta:
+        model = User
+        fields = ['full_name', 'username', 'email', 'age', 'location', 'gender', 'description', 'skills', 'interests']
 
 class MessageSerializer(serializers.ModelSerializer):
     sender = serializers.CharField(source='sender.username')

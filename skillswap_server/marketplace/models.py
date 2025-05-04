@@ -61,15 +61,14 @@ class User(AbstractUser):
         ('O', 'Otro'),
     ]
 
+    avatar = models.PositiveSmallIntegerField(blank=True, null=True)
     full_name = models.CharField(max_length=35)
+    age = models.PositiveSmallIntegerField(blank=True, null=True)
+    location = models.ForeignKey(Location, related_name="users_in_location", on_delete=models.CASCADE, blank=True, null=True)
+    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
     description = models.TextField(blank=True)
     skills = models.ManyToManyField(Skill, related_name="users_with_skill")
     interests = models.ManyToManyField(Skill, related_name="users_interested_in")
-    disponibility = models.CharField(max_length=35, blank=True)
-    location = models.ForeignKey(Location, related_name="users_in_location", on_delete=models.CASCADE, blank=True, null=True)
-    avatar = models.PositiveSmallIntegerField(blank=True, null=True)
-    gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
-    age = models.PositiveSmallIntegerField(blank=True, null=True)
 
     # ratings
     rating_count = models.PositiveIntegerField(default=0)
