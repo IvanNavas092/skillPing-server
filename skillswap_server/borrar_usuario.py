@@ -21,12 +21,4 @@ except User.DoesNotExist:
     print(f"⚠️ El usuario '{username}' no existe.")
 
 
-# === OPCIÓN B (comentada): Borrar todos los usuarios (¡Peligroso!) ===
-
-# confirm_all = input("¿Estás seguro de que quieres eliminar TODOS los usuarios? (s/n): ").lower()
-# if confirm_all == 's':
-#     deleted, _ = User.objects.all().delete()
-#     print(f"✅ Se eliminaron {deleted} usuarios.")
-# else:
-#     print("❌ Cancelado.")
 

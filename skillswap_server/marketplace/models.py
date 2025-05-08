@@ -46,11 +46,14 @@ class Rating(models.Model):
     def __str__(self):
         return f"{self.rating_user} → {self.rated_user}: {self.value}"
     
-# --------------------
-# LOCATION MODEL
-class Location(models.Model):
-    country_name = models.CharField(max_length=100, unique=True)
-    
+
+class Avatar(models.Model):
+    name = models.CharField(max_length=100)  
+    img = models.CharField(max_length=255)
+    selected = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.name
 
 # --------------------
 # MODELO DE USUARIO
@@ -60,11 +63,17 @@ class User(AbstractUser):
         ('F', 'Femenino'),
         ('O', 'Otro'),
     ]
+    AVATAR_CHOICES = [
+        (1, 'Héctor'),
+        (2, 'Manuel'),
+        (3, 'Ana'),
+        (4, 'Ingrid'),
+    ]
 
-    avatar = models.PositiveSmallIntegerField(blank=True, null=True)
+    avatar = models.ForeignKey(Avatar, on_delete=models.CASCADE, blank=True, null=True)
     full_name = models.CharField(max_length=35)
-    age = models.PositiveSmallIntegerField(blank=True, null=True)
-    location = models.ForeignKey(Location, related_name="users_in_location", on_delete=models.CASCADE, blank=True, null=True)
+    age = models.CharField(max_length=2, null=True, blank=True) 
+    location = models.CharField(max_length=35, blank=True, default="No especificado")
     gender = models.CharField(max_length=1, choices=GENDER_CHOICES, blank=True)
     description = models.TextField(blank=True)
     skills = models.ManyToManyField(Skill, related_name="users_with_skill")
@@ -96,7 +105,6 @@ class Message(models.Model):
     receptor = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
-    is_read = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['timestamp']

@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import User, Skill, Category, Rating, Message, Location
+from .models import Avatar, User, Skill, Category, Rating, Message
 from django.contrib.auth.hashers import make_password
 
 # 
@@ -37,7 +37,11 @@ class UserSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = User
-        fields = '__all__' 
+        fields = ['id', 'username', 'email', 'full_name', 
+                'description', 'average_rating',
+                'rating_count', 'skills', 'interests', 'skills_details',
+                'interests_details', 'location', 'avatar', 'gender',
+                'age', 'last_login', 'password']
 
 
     def create(self, validated_data):
@@ -54,14 +58,18 @@ class userLoginSerializer(serializers.ModelSerializer):
         model = User
         fields = ['id', 'username', 'email', 'full_name', 
                 'description', 'average_rating',
-                'rating_count', 'skills', 'interests']
+                'rating_count', 'skills', 'interests', 'location',
+                'avatar', 'gender', 'age']
         
 class updateUserSerializer(serializers.ModelSerializer):
-    skills = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True, required=False)
-    interests = serializers.PrimaryKeyRelatedField(queryset=Skill.objects.all(), many=True, required=False)
+    skills = SkillSerializer(many=True, read_only=True)
+    interests = SkillSerializer(many=True, read_only=True)
     class Meta:
         model = User
-        fields = ['full_name', 'username', 'email', 'age', 'location', 'gender', 'description', 'skills', 'interests']
+        fields = ['id', 'username', 'email', 'full_name', 
+                'description', 'average_rating',
+                'rating_count', 'skills', 'interests', 'location',
+                'avatar', 'gender', 'age']
 
 class MessageSerializer(serializers.ModelSerializer):
     sender = serializers.CharField(source='sender.username')
@@ -69,10 +77,10 @@ class MessageSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Message
-        fields = ['id', 'sender', 'receptor', 'message', 'timestamp', 'is_read']
-
-# Location serializer
-class LocationSerializer(serializers.ModelSerializer):
+        fields = ['id', 'sender', 'receptor', 'message', 'timestamp']
+        
+class avatarSerializer(serializers.ModelSerializer):
     class Meta:
-        model = Location
-        fields = 'country_name'
+        model = Avatar
+        fields = ['id', 'name', 'img', 'selected']
+

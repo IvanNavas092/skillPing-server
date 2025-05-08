@@ -7,11 +7,12 @@ from .pusher import *
 
 router = DefaultRouter()
 router.register(r'skills', SkillViewSet)
-router.register(r'users', UserViewSet)
+router.register(r'users', UserViewSet, basename='users')
 router.register(r'categories', CategoryViewSet)
 router.register(r'ratings', RatingViewSet)
 router.register(r'messages', MessageViewSet)
 router.register(r'users/update-user', updateUserViewSet, basename='update-user')
+router.register(r'avatars', avatarViewSet)
 
 
 urlpatterns = [

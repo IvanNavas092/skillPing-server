@@ -40,6 +40,10 @@ class RatingViewSet(viewsets.ModelViewSet):
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+    
+class avatarViewSet(viewsets.ModelViewSet):
+    queryset = User.objects.all()
+    serializer_class = avatarSerializer
 
 
 
