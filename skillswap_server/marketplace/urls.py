@@ -12,7 +12,6 @@ router.register(r'categories', CategoryViewSet)
 router.register(r'ratings', RatingViewSet)
 router.register(r'messages', MessageViewSet)
 router.register(r'users/update-user', updateUserViewSet, basename='update-user')
-router.register(r'avatars', avatarViewSet)
 
 
 urlpatterns = [
@@ -22,5 +21,6 @@ urlpatterns = [
     path('users/by-category/<category_name>', users_by_category, name='users-by-category'),
     path('chat/history/', get_chat_history, name='get-chat-history'),
     path('countries/', get_countries, name='get-countries'),
+    path('users/<int:id>', getUserById, name='get-user-by-id'),
 ]
 

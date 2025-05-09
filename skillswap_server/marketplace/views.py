@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 import requests
 from rest_framework import viewsets
@@ -41,9 +42,6 @@ class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
     
-class avatarViewSet(viewsets.ModelViewSet):
-    queryset = User.objects.all()
-    serializer_class = avatarSerializer
 
 
 
@@ -116,6 +114,16 @@ def get_countries(request):
         return Response(countries)
     except:
         return Response({'Error: No se pudo obtener los países'})
+    
+    
+def getUserById(request, id):
+    try:
+        user = User.objects.get(id=id)
+        user_data = userLoginSerializer(user).data
+        
+        return JsonResponse(user_data)
+    except User.DoesNotExist:
+        return Response({'Error: Usuario no encontrado'}, status= 404)
     
     
 

@@ -47,13 +47,6 @@ class Rating(models.Model):
         return f"{self.rating_user} → {self.rated_user}: {self.value}"
     
 
-class Avatar(models.Model):
-    name = models.CharField(max_length=100)  
-    img = models.CharField(max_length=255)
-    selected = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.name
 
 # --------------------
 # MODELO DE USUARIO
@@ -70,7 +63,7 @@ class User(AbstractUser):
         (4, 'Ingrid'),
     ]
 
-    avatar = models.ForeignKey(Avatar, on_delete=models.CASCADE, blank=True, null=True)
+    avatar = models.CharField(max_length=35, choices=AVATAR_CHOICES, blank=True, null=True)
     full_name = models.CharField(max_length=35)
     age = models.CharField(max_length=2, null=True, blank=True) 
     location = models.CharField(max_length=35, blank=True, default="No especificado")
@@ -78,10 +71,11 @@ class User(AbstractUser):
     description = models.TextField(blank=True)
     skills = models.ManyToManyField(Skill, related_name="users_with_skill")
     interests = models.ManyToManyField(Skill, related_name="users_interested_in")
-
+    interactions = models.PositiveIntegerField(default=0, blank=True)
     # ratings
     rating_count = models.PositiveIntegerField(default=0)
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
+    
 
     
     def update_rating_stats(self):

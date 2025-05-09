@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Avatar, User, Skill, Category, Rating, Message
+from .models import *
 from django.contrib.auth.hashers import make_password
 
 # 
@@ -41,7 +41,7 @@ class UserSerializer(serializers.ModelSerializer):
                 'description', 'average_rating',
                 'rating_count', 'skills', 'interests', 'skills_details',
                 'interests_details', 'location', 'avatar', 'gender',
-                'age', 'last_login', 'password']
+                'age', 'last_login', 'password', 'interactions']
 
 
     def create(self, validated_data):
@@ -59,7 +59,7 @@ class userLoginSerializer(serializers.ModelSerializer):
         fields = ['id', 'username', 'email', 'full_name', 
                 'description', 'average_rating',
                 'rating_count', 'skills', 'interests', 'location',
-                'avatar', 'gender', 'age']
+                'avatar', 'gender', 'age', 'interactions']
         
 class updateUserSerializer(serializers.ModelSerializer):
     skills = SkillSerializer(many=True, read_only=True)
@@ -79,8 +79,4 @@ class MessageSerializer(serializers.ModelSerializer):
         model = Message
         fields = ['id', 'sender', 'receptor', 'message', 'timestamp']
         
-class avatarSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Avatar
-        fields = ['id', 'name', 'img', 'selected']
 

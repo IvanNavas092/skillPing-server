@@ -34,6 +34,17 @@ def chat(request):
                 receptor=receptor, 
                 message=message_content
             )
+            
+            # Contar mensajes entre estos dos usuarios (ida y vuelta)
+            message_count = Message.objects.filter(
+                sender__in=[sender, receptor],
+                receptor__in=[sender, receptor]
+            ).count()
+
+            # Si alcanzan los 11 mensajes, se considera una nueva "interacción"
+            if message_count == 11:
+                sender.interactions += 1
+                sender.save(update_fields=['interactions'])
 
             # Crear room con los nombres ordenados alfabéticamente
             usernames = sorted([sender_username, receptor_username])
