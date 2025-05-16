@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
+from datetime import timedelta
 from pathlib import Path
 import os
 
@@ -64,20 +65,17 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_extensions',
     'marketplace',
-    # jwt tokens
-    'rest_framework_simplejwt',
 ]
 
-
-
-
-# JWT Tokens
+# AUTHENTICATION
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+        'rest_framework.authentication.SessionAuthentication',
+    ),
+    'DEFAULT_PERMISSION_CLASSES': (
+        'rest_framework.permissions.IsAuthenticated',
+    ),
 }
-
 
 AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
@@ -85,13 +83,22 @@ AUTHENTICATION_BACKENDS = [
 
 MIDDLEWARE = [
     'corsheaders.middleware.CorsMiddleware', # CORS
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+]
+
+
+# Permite el envío de cookies a través de CORS (importantísimo para la sesión)
+CORS_ALLOW_CREDENTIALS = True
+
+# CSRF trusted origin para evitar errores de CSRF
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:4200",
 ]
 
 ROOT_URLCONF = "skillswap_server.urls"

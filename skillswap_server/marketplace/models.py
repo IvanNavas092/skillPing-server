@@ -77,7 +77,12 @@ class User(AbstractUser):
     average_rating = models.DecimalField(max_digits=3, decimal_places=2, default=0.00)
     
 
-    
+    # convert first letter to uppercase -> juan perez -> Juan Perez
+    def save(self, *args, **kwargs):
+        if self.full_name:
+            self.full_name = self.full_name.title()
+        super().save(*args, **kwargs)
+        
     def update_rating_stats(self):
         """Actualiza las estadísticas de valoración"""
         # aggregate para obtener la media y el contador de opiniones
@@ -99,6 +104,7 @@ class Message(models.Model):
     receptor = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)
     message = models.TextField()
     timestamp = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
 
     class Meta:
         ordering = ['timestamp']

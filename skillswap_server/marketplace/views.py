@@ -4,47 +4,63 @@ import requests
 from rest_framework import viewsets
 from .models import *
 from .serializers import *
+
 # Tokens imports
 from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
+
+
 # Chat imports
-from rest_framework.decorators import api_view
 from django.db.models import Q
 
-
-
-
-# pusher chat
-from .pusher import pusher_client
 
 class SkillViewSet(viewsets.ModelViewSet):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
 
+
 class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
-    
+    permission_classes = [AllowAny]
+
+
 class updateUserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = updateUserSerializer
+
 
 class CategoryViewSet(viewsets.ModelViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
 
+
 class RatingViewSet(viewsets.ModelViewSet):
     queryset = Rating.objects.all()
     serializer_class = RatingSerializer
 
+@permission_classes([IsAuthenticated])
 class MessageViewSet(viewsets.ModelViewSet):
     queryset = Message.objects.all()
     serializer_class = MessageSerializer
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def change_password(request):
+    serializer = ChangePasswordSerializer(data=request.data, context={'request': request})
     
-
-
-
+    if serializer.is_valid():
+        user = request.user
+        user.set_password(serializer.validated_data['new_password'])
+        user.save()
+        return Response({'detail': 'Contraseña cambiada correctamente.'}, status=200)
+    
+    return Response(serializer.errors, status=400)
 # Autentication Functions
 class CustomTokenObtainPairView(TokenObtainPairView):
     def post(self, request, *args, **kwargs):
@@ -54,46 +70,47 @@ class CustomTokenObtainPairView(TokenObtainPairView):
             User = get_user_model()
 
             try:
-                user = User.objects.get(username = request.data['username'])
+                user = User.objects.get(username=request.data["username"])
                 user_data = userLoginSerializer(user).data
                 # Construyo mi respuesta personalizada combinando los datos del token y el usuario
-                custom_response = ({
-                    'access_token' : jwt_response.data['access'],
-                    'refresh_token' : jwt_response.data['refresh'],
-                    'user': user_data
-                })
+                custom_response = {
+                    "access_token": jwt_response.data["access"],
+                    "user": user_data,
+                }
                 print(custom_response)
                 return Response(custom_response)
-            
+
             except User.DoesNotExist:
-                return Response({'Error: Credenciales incorrectas'}, status= 401)
-            
+                return Response({"Error: Credenciales incorrectas"}, status=401)
+
         # si hay error devuelvo el error original
         return jwt_response
     
-
-@api_view(['GET'])
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_chat_history(request):
-    user1 = request.query_params.get('user1')
-    user2 = request.query_params.get('user2')
+    user1 = request.query_params.get("user1")
+    user2 = request.query_params.get("user2")
 
     if not user1 or not user2:
-        return Response({'Error: Faltan usuarios'}, status= 400)
-        
+        return Response({"Error: Faltan usuarios"}, status=400)
+
     # filter messages between user1 and user2
     messages = Message.objects.filter(
-        Q(sender__username=user1, receptor__username=user2) |
-        Q(sender__username=user2, receptor__username=user1)
-    ).order_by('timestamp')
+        Q(sender__username=user1, receptor__username=user2)
+        | Q(sender__username=user2, receptor__username=user1)
+    ).order_by("timestamp")
 
     serializer = MessageSerializer(messages, many=True)
     return Response(serializer.data)
-        
+
+
 # take skills from category
-@api_view(['GET'])
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def users_by_category(request, category_name):
     category = get_object_or_404(Category, name=category_name)
-        
+
     # Obtener skills de esa categoría
     skills_in_category = Skill.objects.filter(category=category)
     # Filtrar usuarios que tienen al menos una de esas skills
@@ -103,28 +120,52 @@ def users_by_category(request, category_name):
 
 
 # take countries from API
-@api_view(['GET'])
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
 def get_countries(request):
-    api_url = 'https://restcountries.com/v3.1/all'
+    api_url = "https://restcountries.com/v3.1/all"
     try:
         response = requests.get(api_url)
-        countries = sorted([c['name']['common'] for c in response.json()])
-        
+        countries = sorted([c["name"]["common"] for c in response.json()])
+
         print(countries)
         return Response(countries)
     except:
-        return Response({'Error: No se pudo obtener los países'})
-    
-    
+        return Response({"Error: No se pudo obtener los países"})
+
+
+@permission_classes([IsAuthenticated])
 def getUserById(request, id):
     try:
         user = User.objects.get(id=id)
         user_data = userLoginSerializer(user).data
-        
+
         return JsonResponse(user_data)
     except User.DoesNotExist:
-        return Response({'Error: Usuario no encontrado'}, status= 404)
-    
-    
+        return Response({"Error: Usuario no encontrado"}, status=404)
 
 
+# get user ratings
+@api_view(["GET"])
+@permission_classes([IsAuthenticated])
+def get_user_ratings(request, id):
+    try:
+        # search user with id
+        user = User.objects.get(id=id)
+        # create filter
+        ratings = Rating.objects.filter(rated_user=user).order_by('-created_at')
+        
+        # prepare data for response
+        rating_data = []
+        for rating in ratings:
+            rating_data.append({
+                # take username and avatar from user
+                'rating_user': rating.rating_user.username,
+                'avatar': rating.rating_user.avatar,
+                'value': rating.value,
+                'comment': rating.comment,
+                'created_at': rating.created_at.strftime('%Y-%m-%d %H:%M:%S')
+            })
+        return Response(rating_data)
+    except User.DoesNotExist:
+        return Response({"Error: Usuario no encontrado"}, status=404)

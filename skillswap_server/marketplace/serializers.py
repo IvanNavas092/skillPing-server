@@ -20,7 +20,19 @@ class CategorySerializer(serializers.ModelSerializer):
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
-        fields = '__all__'
+        fields = 'rated_user', 'rating_user', 'value', 'comment'
+        
+    # validate if user has already rated 
+    def validate(self, data):
+        if Rating.objects.filter(
+            rating_user=data['rating_user'],
+            rated_user=data['rated_user']
+        ).exists():
+            raise serializers.ValidationError(
+                # error non field errors for angular message
+                {"non_field_errors": ["Ya has valorado a este usuario."]}
+            )
+        return data
         
 
         
@@ -48,6 +60,22 @@ class UserSerializer(serializers.ModelSerializer):
         validated_data['password'] = make_password(validated_data['password'])
         return super().create(validated_data)
     
+
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_old_password(self, value):
+        user = self.context['request'].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("La contraseña actual es incorrecta.")
+        return value
+
+    def validate_new_password(self, value):
+        if len(value) < 8:
+            raise serializers.ValidationError("La nueva contraseña debe tener al menos 8 caracteres.")
+        return value
+
 
 # Serliazer para autenticar usuarios
 class userLoginSerializer(serializers.ModelSerializer):
@@ -77,6 +105,6 @@ class MessageSerializer(serializers.ModelSerializer):
     
     class Meta:
         model = Message
-        fields = ['id', 'sender', 'receptor', 'message', 'timestamp']
+        fields = ['id', 'sender', 'receptor', 'message', 'timestamp', 'is_read']
         
 
