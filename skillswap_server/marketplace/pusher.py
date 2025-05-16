@@ -1,9 +1,5 @@
 import pusher
 
-
-
-
-
 # pusher configuration
 pusher_client = pusher.Pusher(
     app_id="1980276",

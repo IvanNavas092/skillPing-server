@@ -1,36 +1,41 @@
 from django.urls import path, include
-from rest_framework.routers import DefaultRouter
+from . import views
 from .views import *
-from .chat_views import *
+from rest_framework.routers import DefaultRouter
 
-# webSockets Imports
 
 router = DefaultRouter()
-router.register(r'skills', SkillViewSet)
-router.register(r'users', UserViewSet, basename='users')
-router.register(r'categories', CategoryViewSet)
-router.register(r'ratings', RatingViewSet)
-router.register(r'messages', MessageViewSet)
-router.register(r'users/update-user', updateUserViewSet, basename='update-user')
-
+router.register(r"skills", SkillViewSet, basename="skill")
+router.register(r"users", UserViewSet, basename="user")
+router.register(r"update-user", updateUserViewSet, basename="update-user")
+router.register(r"categories", CategoryViewSet, basename="category")
+router.register(r"ratings", RatingViewSet, basename="rating")
+router.register(r"messages", MessageViewSet, basename="message")
 
 urlpatterns = [
-    path('', include(router.urls)),
-    # chat
-    path('chat/send', chat, name= 'send-message'),
-    path('chat/mark-messages-as-read', mark_messages_as_read, name='mark-messages-as-read'),
-    path('chat/get-unread-counts', get_unread_counts, name='get-unread-counts'),
-    path('chat/history/', get_chat_history, name='get-chat-history'),
-    # autentication
-    path('login/', CustomTokenObtainPairView.as_view(), name='login'),
-    # categories
-    path('users/by-category/<category_name>', users_by_category, name='users-by-category'),
-    # countries
-    path('countries/', get_countries, name='get-countries'),
-    # search users by id
-    path('users/<int:id>', getUserById, name='get-user-by-id'),
-    # search rating
-    path('ratings/<str:id>', get_user_ratings, name='get-user-ratings'),
-    path('change-password/', change_password, name='change-password'),
+    # api endpoints
+    path("", include(router.urls)),
+    # other endpoints
+    # LOGIN / LOGOUT API
+    path("login/", views.login_view, name="login"),
+    path("logout/", views.logout_view, name="logout"),
+    # CHANGE PASSWORD
+    path("change-password/", views.change_password, name="change_password"),
+    # GET USER BY ID
+    path("get-user/<int:id>/", views.get_user_by_id, name="get_user_by_id"),
+    # GET RATINGS BY USER
+    path("user-ratings/<int:id>/", views.get_user_ratings, name="get_user_ratings"),
+    # GET USERS BY CATEGORY
+    path(
+        "users-by-category/<str:category_name>/",
+        views.users_by_category,
+        name="users_by_category",
+    ),
+    # GET COUNTRIES
+    path("get-countries/", views.get_countries, name="get_countries"),
+    # CHAT VIEWS
+    path("chat-history/", views.get_chat_history, name="get_chat_history"),
+    path("chat/send/", views.chat, name="get_chat_history"),
+    path("chat/mark-messages-as-read/", views.mark_messages_as_read, name="mark_messages_as_read"),
+    path("chat/get-unread-counts/", views.get_unread_counts, name="get_unread_counts"),
 ]
-

@@ -44,9 +44,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",  # Front Angular
-]
+
 
 
 # Application definition
@@ -92,8 +90,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:4200",  # Front Angular
+]
 
-# Permite el envío de cookies a través de CORS (importantísimo para la sesión)
+# Permite el envío DE CRENDECIALES a través de CORS (importantísimo para la sesión)
 CORS_ALLOW_CREDENTIALS = True
 
 # CSRF trusted origin para evitar errores de CSRF
