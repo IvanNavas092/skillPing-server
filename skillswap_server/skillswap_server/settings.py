@@ -21,16 +21,18 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse
 
 
-DATABASE_URL='postgresql://neondb_owner:npg_PlR3pQJgaT1f@ep-odd-meadow-a411w6pj-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require'
+DATABASE_URL = "postgresql://neondb_owner:npg_PlR3pQJgaT1f@ep-odd-meadow-a411w6pj-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require"
 
-AUTH_USER_MODEL = 'marketplace.User'  # Uso mi modelo User Personalizado para auth
+AUTH_USER_MODEL = "marketplace.User"  # Uso mi modelo User Personalizado para auth
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 
-MEDIA_URL = '/media/' # Ruta base para los archivos multimedia
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media') # Carpeta donde se guardan los archivos multimedia 
+MEDIA_URL = "/media/"  # Ruta base para los archivos multimedia
+MEDIA_ROOT = os.path.join(
+    BASE_DIR, "media"
+)  # Carpeta donde se guardan los archivos multimedia
 
 
 # Quick-start development settings - unsuitable for production
@@ -45,8 +47,6 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-
-
 # Application definition
 
 INSTALLED_APPS = [
@@ -57,38 +57,40 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     # CORS
-    'corsheaders',
+    "corsheaders",
     # Apps
     # 'channels',
-    'rest_framework',
-    'django_extensions',
-    'marketplace',
+    "rest_framework",
+    "django_extensions",
+    "marketplace",
 ]
 
 # AUTHENTICATION
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework.authentication.SessionAuthentication',
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework.authentication.SessionAuthentication",
     ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',
-    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 }
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',
+    "django.contrib.auth.backends.ModelBackend",
 ]
 
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware', # CORS
-    "django.middleware.common.CommonMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
+
+# Cookies de sesión
+
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # <== Este es el más importante
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",  # Front Angular
@@ -123,7 +125,6 @@ TEMPLATES = [
 WSGI_APPLICATION = "skillswap_server.wsgi.application"
 
 
-
 # DATABASE NEON SETTINGS
 # load_dotenv()
 # tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
@@ -131,7 +132,7 @@ WSGI_APPLICATION = "skillswap_server.wsgi.application"
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': tmpPostgres.path[1:],  
+#         'NAME': tmpPostgres.path[1:],
 #         'USER': tmpPostgres.username,
 #         'PASSWORD': tmpPostgres.password,
 #         'HOST': tmpPostgres.hostname,
