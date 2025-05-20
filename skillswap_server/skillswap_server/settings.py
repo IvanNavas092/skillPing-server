@@ -73,6 +73,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
 }
 
+
+
 AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
@@ -88,18 +90,18 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
-# Cookies de sesión
+# session of cookies
+SESSION_COOKIE_AGE = 1209600  # 2 weeks available cookie
 
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True  # <== Este es el más importante
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",  # Front Angular
 ]
 
-# Permite el envío DE CRENDECIALES a través de CORS (importantísimo para la sesión)
+# Allows sending CREDENTIALS through CORS (very important for the session)
 CORS_ALLOW_CREDENTIALS = True
 
-# CSRF trusted origin para evitar errores de CSRF
+# CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
 ]

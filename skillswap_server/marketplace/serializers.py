@@ -70,7 +70,6 @@ class UserSerializer(serializers.ModelSerializer):
             "gender",
             "age",
             "last_login",
-            "password",
             "interactions",
         ]
 

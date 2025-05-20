@@ -174,7 +174,7 @@ def get_countries(request):
 def get_user_by_id(request, id):
     try:
         user = User.objects.get(id=id)
-        user_data = userLoginSerializer(user).data
+        user_data = UserSerializer(user).data
         return Response(user_data)
     except User.DoesNotExist:
         return Response({"Error: Usuario no encontrado"}, status=404)
