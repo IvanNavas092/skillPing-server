@@ -190,49 +190,49 @@ def get_chat_history(request):
 @permission_classes([IsAuthenticated])
 def chat(request):
     """
-    Envía un mensaje privado entre dos usuarios, notifica vía Pusher
-    y devuelve el ID del mensaje y el nuevo contador de no leídos.
+    Sends a private message between two users, notifies via Pusher,
+    and returns the message ID and the new unread count.
     """
     data = request.data
     sender_username = data.get("sender")
     receptor_username = data.get("receptor")
     content = data.get("message")
 
-    # Validación de campos requeridos
+    # validation of required fields
     if not sender_username or not receptor_username or content is None:
         return Response(
             {"error": "Debe proporcionar 'sender', 'receptor' y 'message'."}, status=400
         )
 
-    # Recuperar instancias de usuario
+    # obtain instances of users
     try:
         sender = User.objects.get(username=sender_username)
         receptor = User.objects.get(username=receptor_username)
     except User.DoesNotExist:
         return Response({"error": "Usuario no encontrado."}, status=404)
 
-    # Crear y guardar el mensaje
+    # create and save message
     new_message = Message.objects.create(
         sender=sender, receptor=receptor, message=content, is_read=False
     )
 
-    # Contar total de mensajes intercambiados
+    # count total messages exchanged
     total_msgs = Message.objects.filter(
         sender__in=[sender, receptor], receptor__in=[sender, receptor]
     ).count()
 
-    # Incrementar interacciones si llegan a 11 mensajes
-    if total_msgs == 11:
+    # increment interactions if 10 messages are received
+    if total_msgs == 10:
         sender.interactions += 1
         sender.save(update_fields=["interactions"])
 
-    # Contar no leídos del receptor
+    # count unread messages from the receiver
     unread_count = Message.objects.filter(receptor=receptor, is_read=False).count()
 
-    # Generar ID de sala
+    # generate room ID
     room_id = f"room-chat-{sorted([sender.username, receptor.username])[0]}_{sorted([sender.username, receptor.username])[1]}"
 
-    # Notificar nuevo mensaje por Pusher
+    # notify new message via Pusher
     pusher_client.trigger(
         room_id,
         "new-message",
@@ -244,10 +244,10 @@ def chat(request):
         },
     )
 
-    # Notificar al receptor de nuevos no leídos
+    # notify the receiver of new unread messages
     pusher_client.trigger(
-        f"notifications-{receptor.username}",
-        "unread-messages",
+        f"notifications-{receptor.username}", # channel 
+        "unread-messages", # event name
         {
             "unread_counts": unread_count,
             "sender": sender.username,
@@ -267,7 +267,7 @@ def chat(request):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def mark_messages_as_read(request):
-    # 1) Usa request.data en lugar de leer request.body
+    # obtain data from request
     current_username = request.data.get("current_user")
     sender_username = request.data.get("sender")
 
@@ -283,15 +283,15 @@ def mark_messages_as_read(request):
     except User.DoesNotExist:
         return Response({"error": "Usuario no encontrado."}, status=404)
 
-    # Marcar como leídos
+    # Mark as read
     Message.objects.filter(sender=sender, receptor=current_user, is_read=False).update(
         is_read=True
     )
 
-    # Nuevo conteo de no leídos
+    # New unread count
     unread_count = Message.objects.filter(receptor=current_user, is_read=False).count()
 
-    # Notificar cambio por Pusher
+    # Notify change by Pusher
     pusher_client.trigger(
         f"notifications-{current_user.username}",
         "unread-messages",
@@ -308,18 +308,16 @@ def mark_messages_as_read(request):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def get_unread_counts(request):
-    # 1) Validamos que venga 'username'
+    # obtain data from request
     username = request.data.get("username")
     if not username:
         return Response({"error": 'Falta el parámetro "username".'}, status=400)
 
-    # 2) Intentamos recuperar el usuario
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:
         return Response({"error": "Usuario no encontrado."}, status=400)
 
-    # 3) Calculamos totales y por remitente
     total_unread = Message.objects.filter(receptor=user, is_read=False).count()
 
     senders_unread = (

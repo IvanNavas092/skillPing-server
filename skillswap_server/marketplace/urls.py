@@ -1,5 +1,4 @@
 from django.urls import path, include
-from . import views
 from .views import *
 from . import views_api_view
 from rest_framework.routers import DefaultRouter
