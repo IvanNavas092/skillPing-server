@@ -1,7 +1,7 @@
 import os
 import django
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'skillswap_server.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'skillping_server.settings')
 django.setup()
 
 from marketplace.models import User

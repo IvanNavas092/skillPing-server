@@ -1,5 +1,5 @@
 # """
-# ASGI config for skillswap_server project.
+# ASGI config for skillping_server project.
 
 # It exposes the ASGI callable as a module-level variable named ``application``.
 
@@ -13,7 +13,7 @@
 # from django.core.asgi import get_asgi_application
 # import marketplace.asgi
 
-# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "skillswap_server.settings")
+# os.environ.setdefault("DJANGO_SETTINGS_MODULE", "skillping_server.settings")
 
 # application = ProtocolTypeRouter({
 #     "http": get_asgi_application(),

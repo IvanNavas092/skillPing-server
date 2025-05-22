@@ -3,7 +3,6 @@ from .models import *
 from django.contrib.auth.hashers import make_password
 
 
-#
 # Skill Serializer
 class SkillSerializer(serializers.ModelSerializer):
     class Meta:
@@ -22,7 +21,7 @@ class CategorySerializer(serializers.ModelSerializer):
 class RatingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Rating
-        fields = "rated_user", "rating_user", "value", "comment"
+        fields = "__all__"
 
     # validate if user has already rated
     def validate(self, data):
@@ -38,19 +37,20 @@ class RatingSerializer(serializers.ModelSerializer):
 
 # User Serializer
 class UserSerializer(serializers.ModelSerializer):
-    # 2 tipos de serializers
-    # campos de solo lectura para mostrar detalles
+    password = serializers.CharField(write_only=True, required=True)
+    
+    # 2 types of serializers
+    # read only fields for showing details
     skills_details = SkillSerializer(source="skills", many=True, read_only=True)
     interests_details = SkillSerializer(source="interests", many=True, read_only=True)
-
-    # Campo de escritura para crear usuarios con sus respectivos skills e intereses para no cargar todo el objeto
+    
+    # write only fields for creating users with their respective skills and interests to not load the whole object
     skills = serializers.PrimaryKeyRelatedField(
         queryset=Skill.objects.all(), many=True, write_only=True
     )
     interests = serializers.PrimaryKeyRelatedField(
         queryset=Skill.objects.all(), many=True, write_only=True
     )
-
     class Meta:
         model = User
         fields = [
@@ -59,6 +59,7 @@ class UserSerializer(serializers.ModelSerializer):
             "email",
             "full_name",
             "description",
+            "password",
             "average_rating",
             "rating_count",
             "skills",
@@ -78,18 +79,7 @@ class UserSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
-class ChangePasswordSerializer(serializers.Serializer):
-    old_password = serializers.CharField(required=True)
-    new_password = serializers.CharField(required=True)
-
-    def validate_old_password(self, value):
-        user = self.context["request"].user
-        if not user.check_password(value):
-            raise serializers.ValidationError("La contraseña actual no es correcta.")
-        return value
-
-
-# Serliazer para autenticar usuarios
+# Serializer for when a user logs in
 class userLoginSerializer(serializers.ModelSerializer):
     skills = SkillSerializer(many=True, read_only=True)
     interests = SkillSerializer(many=True, read_only=True)
@@ -113,7 +103,7 @@ class userLoginSerializer(serializers.ModelSerializer):
             "interactions",
         ]
 
-
+# serializer for update user
 class updateUserSerializer(serializers.ModelSerializer):
     skills = SkillSerializer(many=True, read_only=True)
     interests = SkillSerializer(many=True, read_only=True)
@@ -126,8 +116,6 @@ class updateUserSerializer(serializers.ModelSerializer):
             "email",
             "full_name",
             "description",
-            "average_rating",
-            "rating_count",
             "skills",
             "interests",
             "location",
@@ -137,10 +125,21 @@ class updateUserSerializer(serializers.ModelSerializer):
         ]
 
 
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True)
+
+    def validate_old_password(self, value):
+        user = self.context["request"].user
+        if not user.check_password(value):
+            raise serializers.ValidationError("La contraseña actual no es correcta.")
+        return value
+
+
 class MessageSerializer(serializers.ModelSerializer):
     sender = serializers.CharField(source="sender.username")
     receptor = serializers.CharField(source="receptor.username")
 
     class Meta:
         model = Message
-        fields = ["id", "sender", "receptor", "message", "timestamp", "is_read"]
+        fields = "__all__"

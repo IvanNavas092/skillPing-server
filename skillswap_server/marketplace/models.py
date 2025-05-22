@@ -4,7 +4,7 @@ from django.contrib.auth.models import AbstractUser
 
 
 # --------------------
-# MODELO DE CATEGORIA
+# Category Model
 class Category(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True)
@@ -14,7 +14,7 @@ class Category(models.Model):
         return self.name
     
 # --------------------
-# MODELO DE SKILL
+# Skill Model
 class Skill(models.Model):
     name = models.CharField(max_length=100, unique=True)
     category = models.ForeignKey(Category, related_name="skills", on_delete=models.CASCADE, blank=True, null=True)
@@ -23,7 +23,7 @@ class Skill(models.Model):
         return self.name
     
 # --------------------
-# MODELO DE VALORACION
+# Rating Model
 class Rating(models.Model):
     RATING_CHOICES = [
         (1, '1 - Muy malo'),
@@ -32,24 +32,21 @@ class Rating(models.Model):
         (4, '4 - Bueno'),
         (5, '5 - Excelente'),
     ]
-    # Foráneas
-    rated_user = models.ForeignKey('User', related_name='received_ratings', on_delete=models.CASCADE ) # Usuario que recibe la valoración
-    rating_user = models.ForeignKey('User', related_name='given_ratings', on_delete=models.SET_NULL, null=True, blank=True ) # Usuario que valora
-    # elecciones del usuario (1-5, comentario y fecha)	
+    # Foreign Keys
+    rated_user = models.ForeignKey('User', related_name='received_ratings', on_delete=models.CASCADE ) # User receiving the rating
+    rating_user = models.ForeignKey('User', related_name='given_ratings', on_delete=models.SET_NULL, null=True, blank=True ) # User who values
+    # user elections (1-5, comment and date)	
     value = models.PositiveSmallIntegerField(choices=RATING_CHOICES)
     comment = models.TextField(blank=True, max_length=500)
     created_at = models.DateTimeField(auto_now_add=True)
-    
     class Meta:
-        unique_together = ('rated_user', 'rating_user')  # Para evitar múltiples valoraciones del mismo usuario
+        unique_together = ('rated_user', 'rating_user')  # To avoid multiple ratings from the same user
     
     def __str__(self):
         return f"{self.rating_user} → {self.rated_user}: {self.value}"
     
-
-
 # --------------------
-# MODELO DE USUARIO
+# User Model
 class User(AbstractUser):
     GENDER_CHOICES = [
         ('M', 'Masculino'),
@@ -84,13 +81,13 @@ class User(AbstractUser):
         super().save(*args, **kwargs)
         
     def update_rating_stats(self):
-        """Actualiza las estadísticas de valoración"""
-        # aggregate para obtener la media y el contador de opiniones
+        """Update statistics"""
+        # aggregate for obtain avg and counter of opinions
         stats = self.received_ratings.aggregate(
             average = Avg('value'), # Media
-            count = models.Count('id') # Contador de opiniones
+            count = models.Count('id') # ratings counter
         )
-        # Asigno al user la media y el contador de opiniones 
+        # asign user avg and counter of opinions
         self.average_rating = stats['average'] or 0.00
         self.rating_count = stats['count'] or 0
         self.save()
@@ -98,7 +95,7 @@ class User(AbstractUser):
     def __str__(self):
         return self.username
     
-# modelo de mensaje
+# Message Model
 class Message(models.Model):
     sender = models.ForeignKey(User, related_name='sent_messages', on_delete=models.CASCADE)
     receptor = models.ForeignKey(User, related_name='received_messages', on_delete=models.CASCADE)

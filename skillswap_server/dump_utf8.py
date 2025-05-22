@@ -4,7 +4,7 @@ import os
 import sys
 import io
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "skillswap_server.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "skillping_server.settings")
 django.setup()
 
 from django.core.management import call_command
