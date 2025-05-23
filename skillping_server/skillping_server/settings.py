@@ -106,6 +106,7 @@ CORS_ALLOWED_ORIGINS = [
 # CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
+    "https://skillping-server.onrender.com",
 ]
 
 ROOT_URLCONF = "skillping_server.urls"
