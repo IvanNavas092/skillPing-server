@@ -98,15 +98,12 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
-    "https://skillping-server.onrender.com",
     # Front Angular
 ]
-
 
 # CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
-    "https://skillping-server.onrender.com",
 ]
 
 ROOT_URLCONF = "skillping_server.urls"
