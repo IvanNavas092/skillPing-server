@@ -20,7 +20,6 @@ from dotenv import load_dotenv
 from urllib.parse import urlparse
 
 
-DATABASE_URL = "postgresql://neondb_owner:npg_PlR3pQJgaT1f@ep-odd-meadow-a411w6pj-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require"
 
 AUTH_USER_MODEL = "marketplace.User"  # use my User model for auth
 
@@ -123,23 +122,8 @@ TEMPLATES = [
 WSGI_APPLICATION = "skillping_server.wsgi.application"
 
 
-# DATABASE NEON SETTINGS
-# load_dotenv()
-# tmpPostgres = urlparse(os.getenv("DATABASE_URL"))
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.postgresql',
-#         'NAME': tmpPostgres.path[1:],
-#         'USER': tmpPostgres.username,
-#         'PASSWORD': tmpPostgres.password,
-#         'HOST': tmpPostgres.hostname,
-#         'PORT': tmpPostgres.port or 5432,
-#         'OPTIONS': {
-#             'sslmode': 'require',
-#         },
-#     }
-# }
+
 
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
