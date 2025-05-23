@@ -312,7 +312,7 @@ def get_unread_counts(request):
     username = request.data.get("username")
     if not username:
         return Response({"error": 'Falta el parámetro "username".'}, status=400)
-
+    # user exists
     try:
         user = User.objects.get(username=username)
     except User.DoesNotExist:

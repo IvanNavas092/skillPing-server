@@ -6,7 +6,6 @@ django.setup()
 
 from marketplace.models import User
 
-# OPCIÓN A: Borrar un solo usuario por username ===
 username = input("Introduce el nombre de usuario que deseas eliminar: ")
 
 try:

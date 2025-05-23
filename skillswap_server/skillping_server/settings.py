@@ -22,7 +22,7 @@ from urllib.parse import urlparse
 
 DATABASE_URL = "postgresql://neondb_owner:npg_PlR3pQJgaT1f@ep-odd-meadow-a411w6pj-pooler.us-east-1.aws.neon.tech/neondb?sslmode=require"
 
-AUTH_USER_MODEL = "marketplace.User"  # Uso mi modelo User Personalizado para auth
+AUTH_USER_MODEL = "marketplace.User"  # use my User model for auth
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
