@@ -16,8 +16,6 @@ import os
 
 # Add these at the top of your settings.py
 import os
-from dotenv import load_dotenv
-from urllib.parse import urlparse
 
 
 
@@ -91,7 +89,7 @@ SESSION_COOKIE_AGE = 1209600  # 2 weeks available cookie
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200", 
-    "skillping-server.onrender.com"
+    'https://skillping-server.onrender.com',
     # Front Angular
 ]
 
