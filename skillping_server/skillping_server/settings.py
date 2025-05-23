@@ -40,7 +40,7 @@ SECRET_KEY = "django-insecure-l!s+q&f8xau@@3uv+_#ehfo53&aj!vft1s96c#f=zbpgqmxtqv
 DEBUG = True
 
 ALLOWED_HOSTS = [
-    "https://skillping-server.onrender.com",
+    "skillping-server.onrender.com",
     ]
 
 
