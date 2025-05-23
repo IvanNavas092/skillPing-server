@@ -18,7 +18,6 @@ import os
 import os
 
 
-
 AUTH_USER_MODEL = "marketplace.User"  # use my User model for auth
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,13 +39,15 @@ SECRET_KEY = "django-insecure-l!s+q&f8xau@@3uv+_#ehfo53&aj!vft1s96c#f=zbpgqmxtqv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = [ 'skillping-server.onrender.com' ]
+ALLOWED_HOSTS = [
+    "https://skillping-server.onrender.com",
+    ]
 
 
 # the cookies sending between domains
-SESSION_COOKIE_SAMESITE = 'None'
+SESSION_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SAMESITE = 'None'
+CSRF_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SECURE = True
 
 # Application definition
@@ -79,11 +80,11 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 MIDDLEWARE = [
-    "corsheaders.middleware.CorsMiddleware", # CORS
+    "corsheaders.middleware.CorsMiddleware",  # CORS
     "django.middleware.security.SecurityMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.csrf.CsrfViewMiddleware", # CSRF
+    "django.middleware.csrf.CsrfViewMiddleware",  # CSRF
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
@@ -92,15 +93,15 @@ MIDDLEWARE = [
 # session of cookies
 SESSION_COOKIE_AGE = 1209600  # 2 weeks available cookie
 
+# Allows sending CREDENTIALS through CORS (very important for the session)
+CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200", 
-    'https://skillping-server.onrender.com',
+    "http://localhost:4200",
+    "https://skillping-server.onrender.com",
     # Front Angular
 ]
 
-# Allows sending CREDENTIALS through CORS (very important for the session)
-CORS_ALLOW_CREDENTIALS = True
 
 # CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
@@ -126,9 +127,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = "skillping_server.wsgi.application"
-
-
-
 
 
 # Database
@@ -182,5 +180,3 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-
-
