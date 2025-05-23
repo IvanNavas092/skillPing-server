@@ -51,8 +51,9 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 ### Opción A: Usando pip
-# 1. Clona el repositorio
 ```bash
+# 1. Clona el repositorio
+
 git clone https://github.com/tu-usuario/skillping-backend.git
 cd skillping-backend
 
