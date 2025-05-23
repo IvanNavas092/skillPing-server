@@ -50,11 +50,11 @@ python manage.py createsuperuser
 # 5. Ejecuta el servidor
 python manage.py runserver
 ```
-### Opción A: Usando pip
+### Opción B: Usando Anaconda
 ```bash
 # 1. Clona el repositorio
 
-git clone https://github.com/tu-usuario/skillping-backend.git
+git clone
 cd skillping-backend
 
 # 2. Crea el entorno desde el archivo environment.yml
