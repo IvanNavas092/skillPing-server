@@ -33,7 +33,7 @@ Este es el backend de **SkillPing**, una plataforma para el intercambio de habil
 
 ```bash
 # 1. Clona el repositorio
-git clone 
+git clone https://github.com/IvanNavas092/skillPing-server.git
 cd skillping-backend
 
 # 2. Crea un entorno virtual
@@ -54,7 +54,7 @@ python manage.py runserver
 ```bash
 # 1. Clona el repositorio
 
-git clone
+git clone https://github.com/IvanNavas092/skillPing-server.git
 cd skillping-backend
 
 # 2. Crea el entorno desde el archivo environment.yml
