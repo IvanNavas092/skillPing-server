@@ -31,7 +31,6 @@ from marketplace.pusher import pusher_client
 # ------VIEWS FOR API ENDPOINTS-----
 # ----------------- 
 # GET CSRF TOKEN
-# -----------------
 @api_view(["GET"])
 @permission_classes([AllowAny])
 @ensure_csrf_cookie
@@ -60,7 +59,6 @@ def login_view(request):
 @api_view(["POST"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
-@ensure_csrf_cookie
 def logout_view(request):
     logout(request)
     return Response({"message": "Logout correcto"})
@@ -81,7 +79,6 @@ def current_user(request):
 @api_view(["PUT"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
-@ensure_csrf_cookie
 def change_password(request):
     serializer = ChangePasswordSerializer(
         data=request.data, context={"request": request}
@@ -198,7 +195,6 @@ def get_chat_history(request):
 @api_view(["POST"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
-@ensure_csrf_cookie
 def chat(request):
     """
     Sends a private message between two users, notifies via Pusher,
@@ -277,7 +273,6 @@ def chat(request):
 @api_view(["POST"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
-@ensure_csrf_cookie
 def mark_messages_as_read(request):
     # obtain data from request
     current_username = request.data.get("current_user")
@@ -319,7 +314,6 @@ def mark_messages_as_read(request):
 @api_view(["POST"])
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
-@ensure_csrf_cookie
 def get_unread_counts(request):
     # obtain data from request
     username = request.data.get("username")
