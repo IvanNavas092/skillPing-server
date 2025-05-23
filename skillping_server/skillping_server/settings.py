@@ -90,7 +90,9 @@ SESSION_COOKIE_AGE = 1209600  # 2 weeks available cookie
 
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",  # Front Angular
+    "http://localhost:4200", 
+    "skillping-server.onrender.com"
+    # Front Angular
 ]
 
 # Allows sending CREDENTIALS through CORS (very important for the session)
