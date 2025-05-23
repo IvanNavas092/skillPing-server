@@ -29,6 +29,14 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 from marketplace.pusher import pusher_client
 
 # ------VIEWS FOR API ENDPOINTS-----
+# ----------------- 
+# GET CSRF TOKEN
+# -----------------
+@api_view(["GET"])
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    return Response({"detail": "CSRF cookie set."})
 # -----------------
 # LOGIN
 # -----------------
