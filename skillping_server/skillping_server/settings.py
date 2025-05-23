@@ -98,12 +98,14 @@ CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:4200",
+    "skillping.netlify.app",
     # Front Angular
 ]
 
 # CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
+    "skillping.netlify.app",
 ]
 
 ROOT_URLCONF = "skillping_server.urls"

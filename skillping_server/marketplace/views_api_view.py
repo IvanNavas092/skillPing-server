@@ -41,7 +41,6 @@ def get_csrf_token(request):
 # -----------------
 @api_view(["POST"])
 @permission_classes([AllowAny])
-@ensure_csrf_cookie
 def login_view(request):
     username = request.data.get("username")
     password = request.data.get("password")
