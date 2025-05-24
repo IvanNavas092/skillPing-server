@@ -32,20 +32,13 @@ from marketplace.pusher import pusher_client
 
 # ------VIEWS FOR API ENDPOINTS-----
 # -----------------
-# GET CSRF TOKEN
-@api_view(["GET"])
-@permission_classes([AllowAny])
-@ensure_csrf_cookie
-def get_csrf_token(request):
-    token = get_token(request)
-    return Response({"csrfToken": token})
-
 
 # -----------------
 # LOGIN
 # -----------------
 @api_view(["POST"])
 @permission_classes([AllowAny])
+@ensure_csrf_cookie
 def login_view(request):
     username = request.data.get("username")
     password = request.data.get("password")
@@ -53,10 +46,16 @@ def login_view(request):
     if user is not None:
         login(request, user)
         user_data = userLoginSerializer(user).data
-        return Response({"message": "Login correcto", "user": user_data})
+
+        # Genera el token y devuelve en JSON junto con usuario
+        csrf_token = get_token(request)
+        return Response({
+            "message": "Login correcto",
+            "user": user_data,
+            "csrfToken": csrf_token
+        })
     else:
         return Response({"error": "Credenciales incorrectas"}, status=401)
-
 
 # -----------------
 # LOGOUT
