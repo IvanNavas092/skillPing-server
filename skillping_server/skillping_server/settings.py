@@ -40,6 +40,7 @@ SECRET_KEY = "django-insecure-l!s+q&f8xau@@3uv+_#ehfo53&aj!vft1s96c#f=zbpgqmxtqv
 DEBUG = True
 
 ALLOWED_HOSTS = [
+    "localhost:4200",
     "skillping-server.onrender.com",
     ]
 
@@ -97,14 +98,14 @@ SESSION_COOKIE_AGE = 1209600  # 2 weeks available cookie
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    # "http://localhost:4200",
+    "http://localhost:4200",
     "https://skillping.netlify.app",
     # Front Angular
 ]
 
 # CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
-    # "http://localhost:4200",
+    "http://localhost:4200",
     "https://skillping.netlify.app",
 ]
 
