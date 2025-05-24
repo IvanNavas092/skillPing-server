@@ -32,6 +32,8 @@ from marketplace.pusher import pusher_client
 # ------VIEWS FOR API ENDPOINTS-----
 # ----------------- 
 # GET CSRF TOKEN
+@api_view(["GET"])
+@permission_classes([AllowAny])
 @ensure_csrf_cookie
 def get_csrf_token(request):
     return JsonResponse({"message": "CSRF cookie set"})
