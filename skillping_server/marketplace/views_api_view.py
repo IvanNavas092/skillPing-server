@@ -1,3 +1,4 @@
+from django.http import JsonResponse
 import requests
 from .models import *
 from .serializers import *
@@ -35,7 +36,10 @@ from marketplace.pusher import pusher_client
 @permission_classes([AllowAny])
 @ensure_csrf_cookie
 def get_csrf_token(request):
-    return Response({"detail": "CSRF cookie set."})
+    from django.middleware.csrf import get_token
+    token = get_token(request)
+    return JsonResponse({'csrfToken': token})
+
 # -----------------
 # LOGIN
 # -----------------
