@@ -97,15 +97,15 @@ SESSION_COOKIE_AGE = 1209600  # 2 weeks available cookie
 CORS_ALLOW_CREDENTIALS = True
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:4200",
-    "skillping.netlify.app",
+    # "http://localhost:4200",
+    "https://skillping.netlify.app",
     # Front Angular
 ]
 
 # CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:4200",
-    "skillping.netlify.app",
+    # "http://localhost:4200",
+    "https://skillping.netlify.app",
 ]
 
 ROOT_URLCONF = "skillping_server.urls"
