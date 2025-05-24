@@ -47,9 +47,10 @@ ALLOWED_HOSTS = [
 
 # the cookies sending between domains
 SESSION_COOKIE_SAMESITE = "None"
-SESSION_COOKIE_SECURE = True
+# true if the cookie should be sent only over HTTPS
+SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 
 # Application definition
 
@@ -83,8 +84,8 @@ AUTHENTICATION_BACKENDS = [
 MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",  # CORS
     "django.middleware.security.SecurityMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",  # CSRF
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
