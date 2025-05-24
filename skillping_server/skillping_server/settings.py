@@ -48,9 +48,9 @@ ALLOWED_HOSTS = [
 # the cookies sending between domains
 SESSION_COOKIE_SAMESITE = "None"
 # true if the cookie should be sent only over HTTPS
-SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SECURE = False
+CSRF_COOKIE_SECURE = True
 
 # Application definition
 
