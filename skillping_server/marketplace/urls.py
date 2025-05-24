@@ -15,8 +15,6 @@ urlpatterns = [
     # api endpoints
     path("", include(router.urls)),
     # other endpoints
-    # get tokens
-    path("get-csrf-token/", views_api_view.get_csrf_token, name="get_csrf_token"),
     # current user
     path('current-user/', views_api_view.current_user),
     # LOGIN / LOGOUT API
