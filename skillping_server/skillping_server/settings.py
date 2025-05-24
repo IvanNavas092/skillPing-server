@@ -11,8 +11,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
 from pathlib import Path
-import os
-
 
 # Add these at the top of your settings.py
 import os
@@ -22,12 +20,6 @@ AUTH_USER_MODEL = "marketplace.User"  # use my User model for auth
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
-
-MEDIA_URL = "/media/"  # Ruta base para los archivos multimedia
-MEDIA_ROOT = os.path.join(
-    BASE_DIR, "media"
-)  # Carpeta donde se guardan los archivos multimedia
 
 
 # Quick-start development settings - unsuitable for production
@@ -51,6 +43,8 @@ SESSION_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SECURE = True
 CSRF_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SECURE = True
+# expire session when browser is closed
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
 # Application definition
 

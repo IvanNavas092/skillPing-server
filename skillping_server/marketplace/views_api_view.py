@@ -65,6 +65,10 @@ def login_view(request):
 @permission_classes([IsAuthenticated])
 def logout_view(request):
     logout(request)
+    response = Response({"message": "Logout correcto"})
+    # delete cookies
+    response.delete_cookie('sessionid')
+    response.delete_cookie('csrftoken')      
     return Response({"message": "Logout correcto"})
 
 
