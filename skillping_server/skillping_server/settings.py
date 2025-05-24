@@ -46,9 +46,9 @@ ALLOWED_HOSTS = [
 
 
 # the cookies sending between domains
-SESSION_COOKIE_SAMESITE = "Lax"
+SESSION_COOKIE_SAMESITE = "None"
 SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SECURE = False
 
 # Application definition
