@@ -33,6 +33,13 @@ from marketplace.pusher import pusher_client
 # ------VIEWS FOR API ENDPOINTS-----
 # -----------------
 
+@api_view(["GET"])
+@permission_classes([AllowAny])
+@ensure_csrf_cookie
+def get_csrf_token(request):
+    token = get_token(request)
+    return Response({"csrfToken": token})
+
 # -----------------
 # LOGIN
 # -----------------
