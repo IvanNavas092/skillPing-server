@@ -29,14 +29,17 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 # Pusher
 from marketplace.pusher import pusher_client
 
+
 # ------VIEWS FOR API ENDPOINTS-----
-# ----------------- 
+# -----------------
 # GET CSRF TOKEN
 @api_view(["GET"])
 @permission_classes([AllowAny])
 @ensure_csrf_cookie
 def get_csrf_token(request):
-    return JsonResponse({"message": "CSRF cookie set"})
+    token = get_token(request)
+    return Response({"csrfToken": token})
+
 
 # -----------------
 # LOGIN
@@ -54,6 +57,7 @@ def login_view(request):
     else:
         return Response({"error": "Credenciales incorrectas"}, status=401)
 
+
 # -----------------
 # LOGOUT
 # -----------------
@@ -63,6 +67,7 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return Response({"message": "Logout correcto"})
+
 
 # -----------------
 # GET CURRENT USER
@@ -124,6 +129,7 @@ def get_countries(request):
 
     except requests.RequestException as e:
         return Response({"error": str(e)}, status=502)
+
 
 # -----------------
 # GET USER BY ID
@@ -254,8 +260,8 @@ def chat(request):
 
     # notify the receiver of new unread messages
     pusher_client.trigger(
-        f"notifications-{receptor.username}", # channel 
-        "unread-messages", # event name
+        f"notifications-{receptor.username}",  # channel
+        "unread-messages",  # event name
         {
             "unread_counts": unread_count,
             "sender": sender.username,
