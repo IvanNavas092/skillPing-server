@@ -32,13 +32,9 @@ from marketplace.pusher import pusher_client
 # ------VIEWS FOR API ENDPOINTS-----
 # ----------------- 
 # GET CSRF TOKEN
-@api_view(["GET"])
-@permission_classes([AllowAny])
 @ensure_csrf_cookie
 def get_csrf_token(request):
-    from django.middleware.csrf import get_token
-    token = get_token(request)
-    return JsonResponse({'csrfToken': token})
+    return JsonResponse({"message": "CSRF cookie set"})
 
 # -----------------
 # LOGIN
