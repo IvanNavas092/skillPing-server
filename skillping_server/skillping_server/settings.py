@@ -94,15 +94,21 @@ MIDDLEWARE = [
 SESSION_COOKIE_AGE = 1209600  # 2 weeks available cookie
 
 # Allows sending CREDENTIALS through CORS (very important for the session)
-CORS_ALLOW_CREDENTIALS = True
-
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
+    # tu app Angular en local:
     "http://localhost:4200",
-    # "https://skillping.netlify.app",
-    # Front Angular
+    # localhost http or https
     "http://localhost",
+    "https://localhost",
+    # capacitor
+    "capacitor://localhost",
+    # ionic
+    "ionic://localhost",
+    # netlify
+    "skillping.netlify.app",
 ]
-
+CORS_ALLOW_ALL_ORIGINS = True
 # CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
