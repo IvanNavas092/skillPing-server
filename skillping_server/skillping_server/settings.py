@@ -33,7 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
-    "skillping-server.onrender.com",
+    # "skillping-server.onrender.com",
     
     ]
 
@@ -99,17 +99,14 @@ CORS_ALLOWED_ORIGINS = [
     # tu app Angular en local:
     "http://localhost:4200",
     # localhost http or https
-    "http://localhost",
-    "https://localhost",
     # netlify
-    "https://skillping.netlify.app",
+    # "https://skillping.netlify.app",
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 # CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
-    "https://skillping.netlify.app",
-    "http://localhost",
+    # "https://skillping.netlify.app",
 ]
 
 ROOT_URLCONF = "skillping_server.urls"
