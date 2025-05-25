@@ -34,20 +34,16 @@ Este es el backend de **SkillPing**, una plataforma para el intercambio de habil
 ```bash
 # 1. Clona el repositorio
 git clone https://github.com/IvanNavas092/skillPing-server.git
-cd skillping-backend
+cd skillping-server
 
-# 2. Crea un entorno virtual
-python -m venv venv
-source venv/bin/activate  # En Windows: .\venv\Scripts\activate
-
-# 3. Instala los paquetes
+# 2. Instala los paquetes
 pip install -r requirements.txt
 
-# 4. Migraciones y superusuario
+# 3. Migraciones y superusuario
 python manage.py migrate
 python manage.py createsuperuser
 
-# 5. Ejecuta el servidor
+# 4. Ejecuta el servidor
 python manage.py runserver
 ```
 ### Opción B: Usando Anaconda
