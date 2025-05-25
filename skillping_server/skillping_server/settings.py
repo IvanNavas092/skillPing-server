@@ -33,7 +33,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     "localhost",
-    # "skillping-server.onrender.com",
+    "127.0.0.1",
     
     ]
 
@@ -92,21 +92,18 @@ MIDDLEWARE = [
 
 # session of cookies
 SESSION_COOKIE_AGE = 1209600  # 2 weeks available cookie
-
-# Allows sending CREDENTIALS through CORS (very important for the session)
 CORS_ALLOW_ALL_ORIGINS = False
+# Allows sending CREDENTIALS through CORS (very important for the session)
 CORS_ALLOWED_ORIGINS = [
-    # tu app Angular en local:
+    # local
     "http://localhost:4200",
-    # localhost http or https
-    # netlify
-    # "https://skillping.netlify.app",
 ]
-CORS_ALLOW_ALL_ORIGINS = True
+
+CORS_ALLOW_CREDENTIALS = True
+
 # CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
-    # "https://skillping.netlify.app",
 ]
 
 ROOT_URLCONF = "skillping_server.urls"
