@@ -102,7 +102,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "https://localhost",
     # netlify
-    "skillping.netlify.app",
+    "https://skillping.netlify.app",
 ]
 # CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
