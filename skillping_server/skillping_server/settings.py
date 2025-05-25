@@ -39,10 +39,9 @@ ALLOWED_HOSTS = [
 
 
 # the cookies sending between domains
-SESSION_COOKIE_SAMESITE = "None"
-# true if the cookie should be sent only over HTTPS
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
 SESSION_COOKIE_SECURE = False
-CSRF_COOKIE_SAMESITE = "None"
 CSRF_COOKIE_SECURE = False
 # expire session when browser is closed
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
