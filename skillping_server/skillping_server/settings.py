@@ -101,17 +101,13 @@ CORS_ALLOWED_ORIGINS = [
     # localhost http or https
     "http://localhost",
     "https://localhost",
-    # capacitor
-    "capacitor://localhost",
-    # ionic
-    "ionic://localhost",
     # netlify
     "skillping.netlify.app",
 ]
 # CSRF trusted origin for avoiding CSRF errors
 CSRF_TRUSTED_ORIGINS = [
     "http://localhost:4200",
-    # "https://skillping.netlify.app",
+    "https://skillping.netlify.app",
     "http://localhost",
 ]
 
