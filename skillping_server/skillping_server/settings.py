@@ -41,9 +41,9 @@ ALLOWED_HOSTS = [
 # the cookies sending between domains
 SESSION_COOKIE_SAMESITE = "None"
 # true if the cookie should be sent only over HTTPS
-SESSION_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SAMESITE = "None"
-CSRF_COOKIE_SECURE = True
+CSRF_COOKIE_SECURE = False
 # expire session when browser is closed
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
 
@@ -102,7 +102,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost",
     "https://localhost",
     # netlify
-    "skillping.netlify.app",
+    "https://skillping.netlify.app",
 ]
 CORS_ALLOW_ALL_ORIGINS = True
 # CSRF trusted origin for avoiding CSRF errors
