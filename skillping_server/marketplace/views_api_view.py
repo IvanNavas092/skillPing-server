@@ -1,3 +1,5 @@
+import json
+import os
 from django.http import JsonResponse
 import requests
 from .models import *
