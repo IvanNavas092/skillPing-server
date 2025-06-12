@@ -130,14 +130,18 @@ def users_by_category(request, category_name):
 @authentication_classes([SessionAuthentication])
 @permission_classes([IsAuthenticated])
 def get_countries(request):
-    api_url = "https://restcountries.com/v3.1/all"
     try:
-        response = requests.get(api_url)
-        countries = sorted([c["name"]["common"] for c in response.json()])
+        # Ruta absoluta segura al archivo JSON
+        ruta_archivo = os.path.join(os.path.dirname(__file__), "../countries_spanish.json")
+        with open(ruta_archivo, "r", encoding="utf-8") as f:
+            countries = json.load(f)
+
         return Response(countries)
 
-    except requests.RequestException as e:
-        return Response({"error": str(e)}, status=502)
+    except FileNotFoundError:
+        return Response({"error": "Archivo no encontrado"}, status=404)
+    except json.JSONDecodeError:
+        return Response({"error": "Error al leer el archivo JSON"}, status=400)
 
 
 # -----------------
